@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">LionSchoolApp</string>
+    <string name="title">Lion School</string>
+    <string name="init">Começar</string>
+    <string name="page_init">Página Inicial</string>
+    <string name="page_studants">Página dos alunos</string>
+    <string name="page_studant">Página do aluno</string>
+    <string name="cours">Cursos</string>
+    <string name="all">Todos</string>
+    <string name="coursing">Cursando</string>
+    <string name="finilizid">Cursando</string>
+</resources>
