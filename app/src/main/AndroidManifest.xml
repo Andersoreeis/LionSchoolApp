@@ -12,6 +12,11 @@
         android:theme="@style/Theme.LionSchoolApp"
         tools:targetApi="31">
         <activity
+            android:name=".ActivityCours"
+            android:exported="false"
+            android:label="@string/title_activity_cours"
+            android:theme="@style/Theme.LionSchoolApp" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

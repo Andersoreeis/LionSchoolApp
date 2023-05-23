@@ -9,4 +9,5 @@
     <string name="all">Todos</string>
     <string name="coursing">Cursando</string>
     <string name="finilizid">Cursando</string>
+    <string name="title_activity_cours">ActivityCours</string>
 </resources>
