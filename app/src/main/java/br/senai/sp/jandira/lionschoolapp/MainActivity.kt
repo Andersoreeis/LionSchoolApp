@@ -9,10 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.lionschoolapp.ui.theme.LionSchoolAppTheme
 import br.senai.sp.jandira.lionschoolapp.ui.theme.Shapes
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,73 +40,41 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun WelcomePage() {
-    var showNewPage = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    if (showNewPage.value) {
-        val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        delay(1000) // Espera 1 segundo
         val intent = Intent(context, ActivityCours::class.java)
         context.startActivity(intent)
-
-    } else {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(69, 87, 183)),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-
-
-            ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = null,
-                    modifier = Modifier.size(186.dp)
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = stringResource(id = R.string.title),
-                    fontSize = 40.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .height(200.dp)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(
-                    onClick = { showNewPage.value = true},
-                    modifier = Modifier
-                        .width(276.dp)
-                        .height(53.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(Color.White)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.init),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(69, 87, 183)
-                    )
-
-
-                }
-
-
-            }
-
-        }
     }
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(69, 87, 183)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(500.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = null,
+                modifier = Modifier.size(186.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(id = R.string.title),
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+
+            )
+        }
+    }
 }

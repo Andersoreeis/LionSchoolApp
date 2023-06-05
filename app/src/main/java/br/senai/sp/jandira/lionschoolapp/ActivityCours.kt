@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -78,7 +79,8 @@ fun CoursesInitPage() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = stringResource(id = R.string.page_init),
@@ -111,7 +113,7 @@ fun CoursesInitPage() {
                         color = Color.White
                     )
                 },
-                leadingIcon = {
+                trailingIcon = {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.baseline_search_24),
                         contentDescription = "Icon de Phone",
@@ -120,7 +122,9 @@ fun CoursesInitPage() {
                 },
                 modifier = Modifier
                     .width(370.dp)
-                    .height(58.dp),
+                    .height(58.dp)
+                    .border(width = 1.dp, color = Color.Transparent, shape = RoundedCornerShape(16.dp)),
+
                 shape = RoundedCornerShape(16.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     textColor = Color.Black,
@@ -145,8 +149,8 @@ fun CoursesInitPage() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White)
-                    .padding(36.dp)
+                    .background(Color(210, 210, 210))
+                    .padding(20.dp)
 
 
             ) {
@@ -169,48 +173,58 @@ fun CoursesInitPage() {
                         color = Color(69, 87, 183)
                     )
                 }
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            }
-            LazyColumn {
-                items(coursesList.value) {
-                    Card(
-                        modifier = Modifier
-                            .height(250.dp)
-                            .padding(20.dp)
-                            .width(350.dp),
-                        backgroundColor = Color(69, 87, 183),
-                        border = BorderStroke(width = 3.dp, color = Color(255, 196, 71)),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Box(
+                LazyColumn {
+                    items(coursesList.value) {
+                        Card(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp)
-                                .wrapContentSize(Alignment.Center)
+                                .fillMaxWidth()
+                                .height(240.dp)
+                                .padding(10.dp)
+                                .shadow(
+                                    elevation = 4.dp, // ajuste o valor conforme necessário
+                                    shape = RoundedCornerShape(16.dp)
+                                ),
+                            backgroundColor = Color.White,
+                            shape = RoundedCornerShape(16.dp)
                         ) {
-                            Row {
-                                Box(
-                                    modifier = Modifier
-                                        .height(150.dp)
-                                        .width(150.dp)
-                                        .clip(CircleShape)
-                                        .background(Color(217, 217, 217))
-                                        .wrapContentSize(Alignment.Center)
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp)
+                                    .wrapContentSize(Alignment.Center)
+                            ) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
                                 ) {
-                                    Text(
-                                        text = it.sigla,
-                                        fontSize = 64.sp,
-                                        fontWeight = FontWeight(700),
-                                        color = Color(255, 196, 71),
-                                        modifier = Modifier.border( width = 1.dp, color = Color.White)
 
-                                    )
+                                        Box(
+                                            modifier = Modifier
+                                                .height(150.dp)
+                                                .width(150.dp)
+                                                .clip(CircleShape)
+                                                .background(Color(62, 81, 187))
+                                                .wrapContentSize(Alignment.Center)
+                                        ) {
+                                            Text(
+                                                text = it.sigla,
+                                                fontSize = 64.sp,
+                                                fontWeight = FontWeight(700),
+                                                color = Color.White
+                                            )
+                                        }
+                                        Text(text = it.nome.substring(5), modifier = Modifier.fillMaxWidth().padding(10.dp), textAlign = TextAlign.Center)
+
                                 }
                             }
                         }
                     }
                 }
+
+
             }
 
 
