@@ -35,7 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.lionschoolapp.model.Courses
 import br.senai.sp.jandira.lionschoolapp.model.CoursesList
+import br.senai.sp.jandira.lionschoolapp.model.Students
+import br.senai.sp.jandira.lionschoolapp.model.StundentsList
 import br.senai.sp.jandira.lionschoolapp.service.RetrofitFactory
+import br.senai.sp.jandira.lionschoolapp.service.StudentsService
 import br.senai.sp.jandira.lionschoolapp.ui.theme.LionSchoolAppTheme
 import retrofit2.Call
 import retrofit2.Response
@@ -69,6 +72,23 @@ fun CoursesInitPage() {
             println("Error")
         }
     })
+
+
+
+    val studentList = remember { mutableStateOf(emptyList<Students>()) }
+
+    val callStudents = RetrofitFactory().getStudentsService().getStudentsByCouses()
+    callStudents.enqueue(object : retrofit2.Callback<StundentsList?> {
+        override fun onResponse(call: Call<StundentsList>, response: Response<StundentsList>) {
+            studentList.value = response.body()?.students ?: emptyList()
+        }
+
+        override fun onFailure(call: Call<StudentsList>, t: Throwable) {
+            println("Error")
+        }
+    })
+
+
 
 
     Column(
