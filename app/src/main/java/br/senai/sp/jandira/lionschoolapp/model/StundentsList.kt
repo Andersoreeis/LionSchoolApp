@@ -1,6 +1,6 @@
 package br.senai.sp.jandira.lionschoolapp.model
 
-data class StundentsList (
-val quantidade: Quantidade,
-val students: List<Students>
+data class StudentsList(
+    val quantidade: Int,
+    val curso: List<Student>
 )

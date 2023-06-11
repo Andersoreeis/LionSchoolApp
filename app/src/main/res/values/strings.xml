@@ -11,4 +11,6 @@
     <string name="finilizid">Cursando</string>
     <string name="search_courses">Cursando</string>
     <string name="title_activity_cours">ActivityCours</string>
+    <string name="title_activity_activitiy_students">ActivitiyStudents</string>
+    <string name="title_activity_note_student">NoteStudent</string>
 </resources>
