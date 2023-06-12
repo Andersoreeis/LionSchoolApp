@@ -41,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.lionschoolapp.model.Courses
@@ -67,6 +68,8 @@ class NoteStudent : ComponentActivity() {
 
 
 @Composable
+@Preview(showBackground = true)
+
 fun StudentDetails() {
 
     val student = remember { mutableStateOf(emptyList<Student>()) }
@@ -107,57 +110,44 @@ fun StudentDetails() {
                         context.startActivity(intent)
                     }
             )
-            Text(
-                text = stringResource(id = R.string.page_studant),
-                modifier = Modifier.fillMaxWidth(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = Color.White,
-                textAlign = TextAlign.End
 
-            )
+
         }
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
+                .height(140.dp)
                 .background(Color(69, 87, 183))
-                .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
+                .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
 
 
         ) {
+
+
             if (firstStudent != null) {
 
                 AsyncImage(
                     model = firstStudent.foto,
                     contentDescription = "",
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(100.dp)
+                    modifier = Modifier.fillMaxSize()
+                        .size(110.dp)
 
 
                 )
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ) {
-                firstStudent?.let {
-                    Text(
-                        text = firstStudent.nome,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                    Text(
-                        text = "RA: ${firstStudent.matricula}",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp
-                    )
-                }
+
+            firstStudent?.let {
+                Text(
+                    text = firstStudent.nome,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+
             }
+
 
         }
         Spacer(modifier = Modifier.height(30.dp))
