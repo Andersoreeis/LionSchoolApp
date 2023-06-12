@@ -7,6 +7,6 @@ import retrofit2.http.Query
 
 interface StudentsService {
     @GET("v1/lion-school/alunos")
-    fun getStudentsByCourse(@Query("curso") course: String): Call<StudentsList>
+    fun getStudentsByCourse(@Query("curso") course: String?): Call<StudentsList>
 }
 
