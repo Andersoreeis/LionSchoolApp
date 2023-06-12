@@ -73,11 +73,13 @@ fun PageStudents() {
     var boxColor2 = remember { mutableStateOf(Color(156, 163, 224)) }
     var boxColor3 = remember { mutableStateOf(Color(156, 163, 224)) }
     val clickedColor = remember { (Color(69, 87, 183)) }
+    val status = remember { mutableStateOf("") }
+    val statusValue = status.value
 
     var studentList = remember { mutableStateOf(emptyList<Students>()) }
     val quantidadeStudents = remember { mutableStateOf(0) }
 
-    val call = RetrofitFactory().getStudentsService().getStudentsByCourse(turmas)
+    val call = RetrofitFactory().getStudentsService().getStudentsByCourse(turmas, statusValue)
 
     call.enqueue(object : Callback<StudentsList> {
         override fun onResponse(call: Call<StudentsList>, response: Response<StudentsList>) {
@@ -157,13 +159,18 @@ fun PageStudents() {
                     .height(40.dp)
                     .background(color = boxColor1.value, shape = RoundedCornerShape(10.dp))
                     .clickable {
-
                         if (boxColor1.value == Color(156, 163, 224)) {
                             boxColor1.value = clickedColor
+                            boxColor2.value = Color(156, 163, 224)
+                            boxColor3.value = Color(156, 163, 224)
+                            status.value = ""
+
 
 
                         } else {
                             boxColor1.value = Color(156, 163, 224)
+                            status.value = ""
+
                         }
                     },
                 contentAlignment = Alignment.Center
@@ -183,10 +190,15 @@ fun PageStudents() {
 
                         if (boxColor2.value == Color(156, 163, 224)) {
                             boxColor2.value = clickedColor
+                            boxColor1.value = Color(156, 163, 224)
+                            boxColor3.value = Color(156, 163, 224)
+                            status.value = "cursando"
 
 
                         } else {
                             boxColor2.value = Color(156, 163, 224)
+                            status.value = ""
+
                         }
                     },
                 contentAlignment = Alignment.Center
@@ -208,10 +220,15 @@ fun PageStudents() {
 
                         if (boxColor3.value == Color(156, 163, 224)) {
                             boxColor3.value = clickedColor
+                            boxColor1.value = Color(156, 163, 224)
+                            boxColor2.value = Color(156, 163, 224)
+                            status.value = "finalizado"
 
 
                         } else {
                             boxColor3.value = Color(156, 163, 224)
+                            status.value = ""
+
                         }
                     },
                 contentAlignment = Alignment.Center
@@ -266,7 +283,8 @@ fun PageStudents() {
                     .padding(20.dp)
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     items(studentList.value) { student ->
                         Surface(
@@ -274,11 +292,22 @@ fun PageStudents() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(90.dp)
-                                .padding(vertical = 10.dp).clickable { val intent = Intent(context, NoteStudent::class.java)
+                                .padding(vertical = 10.dp)
+                                .clickable {
+                                    val intent = Intent(context, NoteStudent::class.java)
                                     context.startActivity(intent)
-                                    LocalStorage.saveToSharedPreferences(context, "matricula", student.matricula)
+                                    LocalStorage.saveToSharedPreferences(
+                                        context,
+                                        "matricula",
+                                        student.matricula
+                                    )
                                 },
-                            shape = RoundedCornerShape(topStart = 30.dp, bottomStart = 30.dp, topEnd = 10.dp, bottomEnd = 10.dp)
+                            shape = RoundedCornerShape(
+                                topStart = 30.dp,
+                                bottomStart = 30.dp,
+                                topEnd = 10.dp,
+                                bottomEnd = 10.dp
+                            )
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 AsyncImage(
@@ -290,28 +319,40 @@ fun PageStudents() {
 
 
                                 )
-                               Column(modifier = Modifier.fillMaxSize().padding(top = 15.dp), horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center) {
-                                   Text(
-                                       text = student.nome,
-                                       color = Color.Gray,
-                                       fontSize = 18.sp,
-                                       textAlign = TextAlign.Center
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 15.dp),
+                                    horizontalAlignment = Alignment.Start,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = student.nome,
+                                        color = Color.Gray,
+                                        fontSize = 18.sp,
+                                        textAlign = TextAlign.Center
 
-                                   )
-                                   Row(modifier = Modifier.fillMaxSize().padding(end = 15.dp, bottom = 5.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Bottom) {
+                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(end = 15.dp, bottom = 5.dp),
+                                        horizontalArrangement = Arrangement.End,
+                                        verticalAlignment = Alignment.Bottom
+                                    ) {
 
-                                       Text(
-                                           text = student.status,
-                                           modifier = Modifier
-                                               .clip(CircleShape),
-                                           color = getColorStatus(student.status),
-                                           fontSize = 12.sp,
-                                           fontWeight = FontWeight.Bold,
-                                           textAlign = TextAlign.End
+                                        Text(
+                                            text = student.status,
+                                            modifier = Modifier
+                                                .clip(CircleShape),
+                                            color = getColorStatus(student.status),
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            textAlign = TextAlign.End
 
-                                       )
-                                   }
-                               }
+                                        )
+                                    }
+                                }
                             }
 
                         }
@@ -324,10 +365,10 @@ fun PageStudents() {
     }
 }
 
-fun getColorStatus(status: String): Color{
-    return if(status != "Finalizado") {
+fun getColorStatus(status: String): Color {
+    return if (status != "Finalizado") {
         Color(51, 71, 176)
-    }else{
-        Color(229,182,87)
+    } else {
+        Color(229, 182, 87)
     }
 }
