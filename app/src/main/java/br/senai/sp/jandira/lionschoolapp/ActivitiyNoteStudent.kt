@@ -18,14 +18,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,10 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.senai.sp.jandira.lionschoolapp.model.Courses
-import br.senai.sp.jandira.lionschoolapp.model.CoursesList
-import br.senai.sp.jandira.lionschoolapp.model.Student
-import br.senai.sp.jandira.lionschoolapp.model.StudentList
+import br.senai.sp.jandira.lionschoolapp.model.*
 import br.senai.sp.jandira.lionschoolapp.service.RetrofitFactory
 import br.senai.sp.jandira.lionschoolapp.ui.theme.LionSchoolAppTheme
 import coil.compose.AsyncImage
@@ -71,10 +68,11 @@ class NoteStudent : ComponentActivity() {
 @Preview(showBackground = true)
 
 fun StudentDetails() {
+    val context = LocalContext.current
+
+    val matricula = LocalStorage.getFromSharedPreferences(context, "matricula")
 
     val student = remember { mutableStateOf(emptyList<Student>()) }
-    val context = LocalContext.current
-    val matricula = LocalStorage.getFromSharedPreferences(context, "matricula")
     val call = RetrofitFactory().getNoteStudantService().getStudentByRegistration(matricula)
     call.enqueue(object : retrofit2.Callback<StudentList> {
         override fun onResponse(call: Call<StudentList>, response: Response<StudentList>) {
@@ -86,6 +84,28 @@ fun StudentDetails() {
         }
 
     })
+
+
+
+    var static by remember { mutableStateOf(emptyList<Static>()) }
+
+    val callStatic = RetrofitFactory().getStatisctStudentService().getStaticData(matricula)
+    callStatic.enqueue(object : retrofit2.Callback<StaticList> {
+        override fun onResponse(call: Call<StaticList>, response: Response<StaticList>) {
+
+            static = response.body()!!.notas
+
+        }
+
+        override fun onFailure(call: Call<StaticList>, t: Throwable) {
+            println("Error")
+        }
+    })
+
+
+
+
+
     val firstStudent = student.value.firstOrNull()
 
     Column(
@@ -111,42 +131,52 @@ fun StudentDetails() {
                     }
             )
 
+            firstStudent?.let {
+                var fullName = firstStudent.nome.split(" ")
+                var firstName = fullName.first()
+                Text(
+                    text = firstName,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp,
+                    modifier = Modifier.padding(20.dp)
+                )
+
+            }
+
 
         }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(140.dp)
+                .height(180.dp)
+
                 .background(Color(69, 87, 183))
-                .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
-            verticalArrangement = Arrangement.Center,
+                ,
             horizontalAlignment = Alignment.CenterHorizontally
 
 
         ) {
 
 
-            if (firstStudent != null) {
+            Row(modifier = Modifier.fillMaxSize()) {
 
-                AsyncImage(
-                    model = firstStudent.foto,
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                        .size(110.dp)
+                if (firstStudent != null) {
 
 
-                )
+                    AsyncImage(
+                        model = firstStudent.foto,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .size(150.dp)
+
+
+                    )
+                }
             }
 
-            firstStudent?.let {
-                Text(
-                    text = firstStudent.nome,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp
-                )
 
-            }
 
 
         }
@@ -169,6 +199,17 @@ fun StudentDetails() {
                 shape = RoundedCornerShape(16.dp)
             ) {}
         }
+
+        LazyRow(){
+            items(static){
+
+                Text(text = it.media)
+            }
+
+
+        }
+
+
     }
 
 

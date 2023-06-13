@@ -25,4 +25,8 @@ class RetrofitFactory {
     fun getNoteStudantService(): StudantService{
         return retrofitFactory.create(StudantService::class.java)
     }
+
+    fun getStatisctStudentService(): StaticService{
+        return retrofitFactory.create(StaticService::class.java)
+    }
 }
